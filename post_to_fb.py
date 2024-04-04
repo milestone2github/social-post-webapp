@@ -22,10 +22,10 @@ def post_image_to_facebook_page(access_token, page_id, image_path, message):
   try:
     response = requests.post(graph_api_url, data=payload, files=files)
     if response.ok:
-      print('Post on facebook successfully')
+      logging.info('Post on facebook successfully')
       return response.json()
     json_res = response.json()
-    logging.error('Unable to post on facebook: ', json_res['error']['message'])
+    logging.error('Unable to post on facebook: %s', json_res['error']['message'])
     return
   except Exception as e:
     logging.error(f"Error in posting to facebook: {e}")
@@ -47,10 +47,10 @@ def post_text_to_facebook_page(access_token, page_id, message):
   try:
     response = requests.post(graph_api_url, data=payload)
     if response.ok:
-      print('Post text on facebook successfully')
+      logging.info('Post text on facebook successfully')
       return response.json()
     json_res = response.json()
-    logging.error('Unable to post on facebook: ', json_res['error']['message'])
+    logging.error('Unable to post on facebook: %s', json_res['error']['message'])
     return
   except Exception as e:
     logging.error(f"Error in posting to facebook: {e}")

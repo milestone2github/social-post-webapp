@@ -1,2 +1,4 @@
 .env
 myenv
+app.log
+uploads/*
