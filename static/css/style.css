@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --white: #FFFFFF;
+  --platinum: #D9D9D9;
+  --green: #3C6E71;
+  --jet-black: #353535;
+  --indigo: #284B63;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: var(--white);
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0.5rem;
+}
+
+section h2 {
+  color: var(--green);
+  margin: 1rem 0;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px 0;
+}
+
+form .field {
+  display: flex;
+  flex-direction: column;
+}
+
+section label {
+  font-size: 1.2rem;
+  color: var(--indigo);
+  padding: 6px 0;
+}
+
+form textarea {
+  border-radius: 8px;
+  padding: 8px;
+}
+
+form input:not([type='submit']):focus-visible, form textarea:focus-visible {
+  outline: var(--indigo) auto 1px;
+}
+
+form input[type='submit'] {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+form input[type='file'] {
+  padding: 44px 8px;
+  border: 2px dashed var(--indigo);
+  border-radius: 8px;
+  background: #4a738e1a;
+}
+
+form .info {
+  font-size: 0.8rem;
+  margin-top: 4px;
+  color: var(--jet-black);
+}
+
+form input[type='submit']:hover {
+  /* color: var(--platinum); */
+  background-color: #305759;
+}
