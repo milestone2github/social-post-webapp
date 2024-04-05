@@ -5,6 +5,7 @@ from tweet import post_tweet_with_image, post_tweet
 from post_to_linkedIn import post_on_linkedin
 from dotenv import load_dotenv
 import logging
+from functools import wraps
 
 # SECRETS 
 FB_ACCESS_TOKEN = os.environ.get('FB_ACCESS_TOKEN')
@@ -15,6 +16,7 @@ TWITTER_ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN')
 TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
 LINKEDIN_ACCESS_TOKEN = os.environ.get('LINKEDIN_ACCESS_TOKEN')
 LINKEDIN_ORG_ID = os.environ.get('LINKEDIN_ORG_ID')
+X_API_KEY = os.environ.get('X_API_KEY')
 
 app = Flask(__name__)
 
@@ -51,6 +53,15 @@ def allowed_file(filename):
   return '.' in filename and \
     filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Authentication Middleware 
+def require_app_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.headers.get('x-api-key') != X_API_KEY:
+            return jsonify({'message': 'Unauthorized'}), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
 # index route 
 @app.route('/')
 def index():
@@ -58,6 +69,7 @@ def index():
 
 # route to post image 
 @app.route('/image', methods=['POST'])
+@require_app_key
 def upload_file():
   # Check if the post request has the file part
   if 'file' not in request.files:
@@ -100,6 +112,7 @@ def upload_file():
 
 # route to post text only 
 @app.route('/text', methods=['POST'])
+@require_app_key
 def upload_text():
   text = request.form.get('text', '')
   if len(text) < 3 :
