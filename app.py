@@ -44,6 +44,9 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 1MB max-limit.
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+# Ensure the upload directory exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 def allowed_file(filename):
   return '.' in filename and \
     filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -117,5 +120,4 @@ def upload_text():
   return jsonify({'message': 'Text uploaded successfully'}), 200
 
 if __name__ == '__main__':
-  os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
   app.run(debug=True)
