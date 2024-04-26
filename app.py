@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import logging
 from functools import wraps
 
-# SECRETS 
 FB_ACCESS_TOKEN = os.environ.get('FB_ACCESS_TOKEN')
 FB_PAGE_ID = os.environ.get('FB_PAGE_ID')
 TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
@@ -17,7 +16,14 @@ TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
 LINKEDIN_ACCESS_TOKEN = os.environ.get('LINKEDIN_ACCESS_TOKEN')
 LINKEDIN_ORG_ID = os.environ.get('LINKEDIN_ORG_ID')
 X_API_KEY = os.environ.get('X_API_KEY')
-
+PLANVESTS_FB_ACCESS_TOKEN = os.environ.get('PLANVESTS_FB_ACCESS_TOKEN')
+PLANVESTS_FB_PAGE_ID = os.environ.get('PLANVESTS_FB_PAGE_ID')
+PLANVESTS_TWITTER_CONSUMER_KEY = os.environ.get('PLANVESTS_TWITTER_CONSUMER_KEY')
+PLANVESTS_TWITTER_CONSUMER_SECRET = os.environ.get('PLANVESTS_TWITTER_CONSUMER_SECRET')
+PLANVESTS_TWITTER_ACCESS_TOKEN = os.environ.get('PLANVESTS_TWITTER_ACCESS_TOKEN')
+PLANVESTS_TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('PLANVESTS_TWITTER_ACCESS_TOKEN_SECRET')
+PLANVESTS_LINKEDIN_ACCESS_TOKEN = os.environ.get('PLANVESTS_LINKEDIN_ACCESS_TOKEN')
+PLANVESTS_LINKEDIN_ORG_ID = os.environ.get('PLANVESTS_LINKEDIN_ORG_ID')
 app = Flask(__name__)
 
 LOG_FILE = "app.log"
@@ -94,18 +100,25 @@ def upload_file():
     logging.error('Invalid file type or size')
     return jsonify({'message': 'Invalid file type or size'}), 400
 
-  text = request.form.get('text', '')
-  print(f'Received text: {text}')
+  fb_text = request.form.get('fb_text', '')
+  twitter_text = request.form.get('twitter_text', '')
+  linkedin_text = request.form.get('linkedin_text', '')
+  print(f'Received text: {fb_text}')
+  print(f'Received text: {twitter_text}')
+  print(f'Received text: {linkedin_text}')
 
   # post image to facebook page 
-  post_image_to_facebook_page(FB_ACCESS_TOKEN, FB_PAGE_ID, image_path, text)
+  post_image_to_facebook_page(PLANVESTS_FB_ACCESS_TOKEN, PLANVESTS_FB_PAGE_ID, image_path, fb_text)
+  post_image_to_facebook_page(FB_ACCESS_TOKEN, FB_PAGE_ID, image_path, fb_text)
   
 
   # tweet on twitter
-  post_tweet_with_image(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, image_path, text)
+  post_tweet_with_image(PLANVESTS_TWITTER_CONSUMER_KEY, PLANVESTS_TWITTER_CONSUMER_SECRET, PLANVESTS_TWITTER_ACCESS_TOKEN, PLANVESTS_TWITTER_ACCESS_TOKEN_SECRET, image_path, twitter_text)
+  post_tweet_with_image(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, image_path, twitter_text)
 
   # post on linkedIn
-  post_on_linkedin(LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID, text, image_path)
+  post_on_linkedin(PLANVESTS_LINKEDIN_ACCESS_TOKEN, PLANVESTS_LINKEDIN_ORG_ID, linkedin_text, image_path)
+  post_on_linkedin(LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID, linkedin_text, image_path)
 
   return jsonify({'message': 'File successfully uploaded'}), 200
 
@@ -113,24 +126,34 @@ def upload_file():
 # route to post text only 
 @app.route('/text', methods=['POST'])
 @require_app_key
-def upload_text():
-  text = request.form.get('text', '')
-  if len(text) < 3 :
-    logging.error('Text length less than 3')
-    return jsonify({'message': 'The minimum length of the text must be 3'})
-  
-  logging.info(f'Received text in text endpoint: {text}')
+def upload_fb_text():
+    fb_text = request.form.get('fb_text', '')
+    twitter_text = request.form.get('twitter_text', '')
+    linkedin_text = request.form.get('linkedin_text', '')
+    if len(fb_text) < 3:
+        logging.error('Text length less than 3')
+        return jsonify({'message': 'The minimum length of the text must be 3'}), 400
 
-  # post text to facebook page
-  post_text_to_facebook_page(FB_ACCESS_TOKEN, FB_PAGE_ID, text)
+    # Post text to Facebook page
+    post_text_to_facebook_page(PLANVESTS_FB_ACCESS_TOKEN, PLANVESTS_FB_PAGE_ID, fb_text)
+    post_text_to_facebook_page(FB_ACCESS_TOKEN, FB_PAGE_ID, fb_text)
+    if len(twitter_text) < 3:
+        logging.error('Text length less than 3')
+        return jsonify({'message': 'The minimum length of the text must be 3'}), 400
 
-  # tweet on twitter
-  post_tweet(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, text)
+    # Post text to twiter page
+    post_tweet(PLANVESTS_TWITTER_CONSUMER_KEY, PLANVESTS_TWITTER_CONSUMER_SECRET, PLANVESTS_TWITTER_ACCESS_TOKEN, PLANVESTS_TWITTER_ACCESS_TOKEN_SECRET, twitter_text)
+    post_tweet(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, twitter_text)
+    
+    if len(linkedin_text) < 3:
+        logging.error('Text length less than 3')
+        return jsonify({'message': 'The minimum length of the text must be 3'}), 400
 
   # post on linkedIn
-  post_on_linkedin(LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID, text)
+    post_on_linkedin(PLANVESTS_LINKEDIN_ACCESS_TOKEN, PLANVESTS_LINKEDIN_ORG_ID, linkedin_text)
+    post_on_linkedin(LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORG_ID, linkedin_text)
 
-  return jsonify({'message': 'Text uploaded successfully'}), 200
+    return jsonify({'message': 'Text uploaded successfully to all platform'}), 200
 
 if __name__ == '__main__':
   app.run(debug=True)
