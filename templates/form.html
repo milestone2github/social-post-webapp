@@ -39,16 +39,17 @@
     event.preventDefault();
 
     let submitButton = document.getElementById('submit-planvest');
-    submitButton.value = 'Posting...';
-    submitButton.setAttribute('disabled', 'disabled')
-
+    
     var form = document.getElementById('myForm');
     var formData = new FormData(form);
     var fileInput = document.getElementById('file');
     var textInput = document.getElementById('text');
-
+    
     // Check if file is uploaded
     if (fileInput.value.length > 0 && textInput.value.trim().length > 0) {
+      submitButton.value = 'Posting...';
+      submitButton.setAttribute('disabled', 'disabled')
+      
       fetch('/post-on-planvest', {
         method: 'POST',
         body: formData
@@ -74,16 +75,17 @@
   function handleMnivesh(event) {
     event.preventDefault();
     let submitButton = document.getElementById('submit-mnivesh');
-    submitButton.value = 'Posting...';
-    submitButton.setAttribute('disabled', 'disabled')
-
+    
     var form = document.getElementById('myForm');
     var formData = new FormData(form);
     var fileInput = document.getElementById('file');
     var textInput = document.getElementById('text');
-
+    
     // Check if file is uploaded
     if (fileInput.value.length > 0 && textInput.value.trim().length > 0) {
+      submitButton.value = 'Posting...';
+      submitButton.setAttribute('disabled', 'disabled')
+
       fetch('/post-on-mnivesh', {
         method: 'POST',
         body: formData
