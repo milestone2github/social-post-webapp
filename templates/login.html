@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>Login</title>
+</head>
+<body>
+  <form id="login-form" onsubmit="handleLogin(event)">
+    <h1>Welcome to mNivesh</h1>
+    <div class="flex center-h-v">
+      <input type="submit" id="login-btn" value="Login with Zoho">
+    </div>
+  </form>
+</body>
+<script>
+  function handleLogin(event) {
+    event.preventDefault();
+    console.log('clicked login with zoho')
+    window.location.href = 'http://localhost:5000/auth/zoho'
+  }
+</script>
+</html>

@@ -25,6 +25,8 @@ section {
   flex-direction: column;
   align-items: center;
   padding: 1rem 0.5rem;
+  width: 768px;
+  margin: auto;
 }
 
 section h2 {
@@ -66,6 +68,7 @@ section label {
 form textarea {
   border-radius: 8px;
   padding: 8px;
+  width: 100%;
 }
 
 form input:not([type='submit']):focus-visible, form textarea:focus-visible {
@@ -73,7 +76,6 @@ form input:not([type='submit']):focus-visible, form textarea:focus-visible {
 }
 
 form input[type='submit'] {
-  width: 100%;
   padding: 8px 16px;
   border: 1px solid var(--green);
   border-radius: 8px;
@@ -82,6 +84,8 @@ form input[type='submit'] {
   border: none;
   font-size: 1rem;
   cursor: pointer;
+  min-width: fit-content;
+  flex: 1;
 }
 
 form input[type='file'] {
@@ -102,8 +106,13 @@ form input[type='submit']:hover {
   background-color: var(--dark-green);
 }
 
+form input[type='submit']:disabled {
+  border: 1px solid #6c8c8e;
+  background-color: #6c8c8e;
+}
+
 .submit-wrapper {
-  justify-content: space-between;
+  flex-wrap: wrap;
   margin: 16px 0;
 }
 
@@ -116,4 +125,30 @@ form input[type='submit']:hover {
 #submit-planvest:hover {
   color: var(--white);
   background-color: var(--dark-green);
+}
+
+.center-h-v {
+  align-items: center;
+  justify-content: center;
+}
+
+#login-form {
+  display: flex;
+  justify-content: center;
+}
+
+#login-form h1 {
+  color: var(--jet-black);
+  margin: 2rem auto;
+}
+
+#login-btn {
+  margin-top: 2rem;
+  flex: 0;
+}
+
+@media screen and (max-width: 768px) {
+  section {
+    width: 100%;
+  }
 }
