@@ -27,7 +27,9 @@ def require_zoho_login(f):
   @wraps(f)
   def decorated_function(*args, **kwargs):
     access_token = session.get('access_token')
-    if not access_token or not verify_zoho_access_token(access_token):
+    if not access_token:
+      return jsonify({'message': 'Unauthorized'}), 403
+    elif access_token and not verify_zoho_access_token(access_token):
       session.pop('access_token')
       return jsonify({'message': 'Unauthorized'}), 403
     return f(*args, **kwargs)
@@ -38,7 +40,9 @@ def require_login(f):
   def decorated_function(*args, **kwargs):
     print(f'in require_login')
     access_token = session.get('access_token')
-    if not access_token or not verify_zoho_access_token(access_token):
+    if not access_token:
+      return redirect(url_for('login'))
+    elif access_token and not verify_zoho_access_token(access_token):
       session.pop('access_token')
       return redirect(url_for('login'))
     return f(*args, **kwargs)
