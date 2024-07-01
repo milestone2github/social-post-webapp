@@ -54,7 +54,7 @@ logger.addHandler(console_handler)
 
 # Configuration
 app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 1MB max-limit.
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB max-limit.
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 # Ensure the upload directory exists
@@ -247,5 +247,16 @@ def post_on_planvest():
   post_on_linkedin(PLANVESTS_LINKEDIN_ACCESS_TOKEN, PLANVESTS_LINKEDIN_ORG_ID, text, image_path)
   
   return jsonify({'message': 'File successfully uploaded'}), 200
+
+@app.route('/post-without-zoho/mnivesh', methods=['POST'])
+@require_app_key
+def post_on_mnivesh_without_zoho():
+  post_on_mnivesh()
+
+@app.route('/post-without-zoho/planvest', methods=['POST'])
+@require_app_key
+def post_on_planvest_without_zoho():
+  post_on_planvest()
+  
 if __name__ == '__main__':
   app.run(debug=True)
