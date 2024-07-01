@@ -160,11 +160,8 @@ def upload_fb_text():
 
     return jsonify({'message': 'Text uploaded successfully to all platform'}), 200
 
-
-# route to post image and text on mnivesh only
-@app.route('/post-on-mnivesh', methods=['POST'])
-@require_zoho_login
-def post_on_mnivesh():
+# controller to post on mnivesh 
+def handle_post_on_mnivesh():
   # Check if the post request has the file part
   if 'file' not in request.files:
     logging.error('No file part in the request')
@@ -204,11 +201,8 @@ def post_on_mnivesh():
 
   return jsonify({'message': 'File successfully uploaded'}), 200
 
-
-# route to post image and text on Planvest
-@app.route('/post-on-planvest', methods=['POST'])
-@require_zoho_login
-def post_on_planvest():
+# controller to post on Planvest 
+def handle_post_on_planvest():
   # Check if the post request has the file part
   if 'file' not in request.files:
     logging.error('No file part in the request')
@@ -248,15 +242,28 @@ def post_on_planvest():
   
   return jsonify({'message': 'File successfully uploaded'}), 200
 
+
+# route to post image and text on mnivesh only
+@app.route('/post-on-mnivesh', methods=['POST'])
+@require_zoho_login
+def post_on_mnivesh():
+  return handle_post_on_mnivesh()
+
+# route to post image and text on Planvest
+@app.route('/post-on-planvest', methods=['POST'])
+@require_zoho_login
+def post_on_planvest():
+  return handle_post_on_planvest()
+
 @app.route('/post-without-zoho/mnivesh', methods=['POST'])
 @require_app_key
 def post_on_mnivesh_without_zoho():
-  post_on_mnivesh()
+  return handle_post_on_mnivesh()
 
 @app.route('/post-without-zoho/planvest', methods=['POST'])
 @require_app_key
 def post_on_planvest_without_zoho():
-  post_on_planvest()
-  
+  return handle_post_on_planvest()
+
 if __name__ == '__main__':
   app.run(debug=True)
